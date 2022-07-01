@@ -1,19 +1,11 @@
 class Tax
     YES_REGEXP = /y|yes/i.freeze
     def sales_tax(sales_tax_exempted, price)
-      if YES_REGEXP.match? sales_tax_exempted
-        0
-      else
-        price * 0.1
-      end
+      (YES_REGEXP.match? sales_tax_exempted) ? 0 : price * 0.1
     end
   
     def import_duty(imported, price)
-      if YES_REGEXP.match? imported
-        0.05 * price
-      else
-        0
-      end
+      (YES_REGEXP.match? imported) ? 0.05 * price : 0
     end
   end
   
