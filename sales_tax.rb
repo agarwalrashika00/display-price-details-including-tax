@@ -25,25 +25,19 @@
   class Product
     YES_REGEXP = /y|yes/i.freeze
     attr_reader :product, :price, :sales_tax, :import_duty
-    def initialize(product, price, sales_tax, import_duty)
+    def initialize(product, price, sales_tax_exempted, imported)
       @product = product
       @price = price
-      @sales_tax = sales_tax
-      @import_duty = import_duty
+      @sales_tax = calc_sales_tax(sales_tax_exempted, price)
+      @import_duty = calc_import_duty(imported, price)
     end
   
-    def self.sales_tax(sales_tax_exempted, price)
+    def calc_sales_tax(sales_tax_exempted, price)
       (YES_REGEXP.match? sales_tax_exempted) ? 0 : price * 0.1
     end
 
-    def self.import_duty(imported, price)
+    def calc_import_duty(imported, price)
       (YES_REGEXP.match? imported) ? 0.05 * price : 0
-    end
-
-    def self.add_new_product(product, imported, sales_tax_exempted, price, all_products)
-      sales_tax = sales_tax(sales_tax_exempted, price)
-      import_duty = import_duty(imported, price)
-      all_products.add_product (new(product, price, sales_tax, import_duty))
     end
   end
   
@@ -51,7 +45,7 @@
   class InputDetails
     def get_product_details
       add_item = true
-      all_products = Cart.new
+      product_list = Cart.new
       while add_item
         puts 'Name of the product: '
         product = gets.chomp
@@ -61,14 +55,14 @@
         sales_tax_exempted = gets.chomp
         puts 'Price: '
         price = gets.chomp.to_f
-        Product.add_new_product(product, imported, sales_tax_exempted, price, all_products)
-  
+        product_list.add_product (Product.new(product, price, sales_tax_exempted, imported))
+
         puts 'Do you want to add more items to your list(y/n): '
         add_item = gets.chomp == 'y'
       end
-      all_products
+      product_list
     end
   end
   
-  all_products = InputDetails.new.get_product_details
-  all_products.show_list
+  product_list = InputDetails.new.get_product_details
+  product_list.show_list
