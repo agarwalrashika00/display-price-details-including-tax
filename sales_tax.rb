@@ -8,16 +8,19 @@
     def add_product(product)
       list << product
     end
+
+    def total_price
+      list.inject(0) do |total_price, curr_item|
+        total_price + curr_item.price_with_taxes
+      end
+    end
   
     def show_list
-      grand_total = 0
       puts 'PRODUCT'.ljust(15) + '|' + 'PRICE'.ljust(7) + '|' + 'SALES TAX'.ljust(11) + '|' + 'IMPORT DUTY'.ljust(12) + '|TOTAL PRICE'
       list.each do |item|
-        total_price = item.price + item.sales_tax + item.import_duty
-        puts "#{item.product.ljust(15)}|#{item.price.to_s.ljust(7)}|#{item.sales_tax.to_s.ljust(11)}|#{item.import_duty.to_s.ljust(12)}|#{total_price}"
-        grand_total += total_price
+        puts "#{item.product.ljust(15)}|#{item.price.to_s.ljust(7)}|#{item.sales_tax.to_s.ljust(11)}|#{item.import_duty.to_s.ljust(12)}|#{item.price_with_taxes}"
       end
-      puts "GRAND TOTAL = #{grand_total}".rjust(54)
+      puts "GRAND TOTAL = #{total_price}".rjust(54)
     end
   end
   
@@ -38,6 +41,10 @@
 
     def calc_import_duty(imported, price)
       (YES_REGEXP.match? imported) ? 0.05 * price : 0
+    end
+
+    def price_with_taxes
+      price + @sales_tax + @import_duty
     end
   end
   
