@@ -1,4 +1,4 @@
-  # products class to store a list of all products added
+  # Cart class to store a list of all products added
   class Cart
     attr_reader :list
     def initialize
@@ -21,7 +21,7 @@
     end
   end
   
-  # product class to handle individual product
+  # Product class to handle individual product
   class Product
     YES_REGEXP = /y|yes/i.freeze
     attr_reader :product, :price, :sales_tax, :import_duty
