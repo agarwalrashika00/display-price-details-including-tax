@@ -37,6 +37,8 @@
   # Product class to handle individual product
   class Product
     YES_REGEXP = /y|yes/i.freeze
+    SALES_TAX = 10.0
+    IMPORT_DUTY = 5.0
     attr_reader :product, :price, :sales_tax, :import_duty
     def initialize(product, price, sales_tax_exempted, imported)
       @product = product
@@ -52,11 +54,11 @@
     private
 
     def calc_sales_tax(sales_tax_exempted, price)
-      (YES_REGEXP.match? sales_tax_exempted) ? 0 : price * 0.1
+      (YES_REGEXP.match? sales_tax_exempted) ? 0 : (SALES_TAX.to_f / 100 * price)
     end
 
     def calc_import_duty(imported, price)
-      (YES_REGEXP.match? imported) ? 0.05 * price : 0
+      (YES_REGEXP.match? imported) ? (IMPORT_DUTY.to_f / 100 * price) : 0
     end
   end
   
