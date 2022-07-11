@@ -17,12 +17,20 @@
         sales_tax_exempted = gets.chomp
         puts 'Price: '
         price = gets.chomp.to_f
-        list << Product.new(product, price, sales_tax_exempted, imported)
-        @total_price += list.last.price_with_taxes
+        add_to_list(Product.new(product, price, sales_tax_exempted, imported))
+        increment_total_price(list.last.price_with_taxes)
 
         puts 'Do you want to add more items to your list(y/n): '
         add_item = gets.chomp == 'y'
       end
+    end
+
+    def add_to_list(product)
+      list << product
+    end
+
+    def increment_total_price(price)
+      @total_price += price
     end
   
     def show_list
