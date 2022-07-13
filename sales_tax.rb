@@ -1,9 +1,8 @@
   # Cart class to store a list of all products added
   class Cart
-    attr_reader :list, :total_price
+    attr_reader :list
     def initialize
       @list = []
-      @total_price = 0
     end
 
     def get_product_details
@@ -18,7 +17,6 @@
         puts 'Price: '
         price = gets.chomp.to_f
         add_to_list(Product.new(product, price, sales_tax_exempted, imported))
-        increment_total_price(list.last.price_with_taxes)
 
         puts 'Do you want to add more items to your list(y/n): '
         add_item = gets.chomp == 'y'
@@ -29,8 +27,10 @@
       list << product
     end
 
-    def increment_total_price(price)
-      @total_price += price
+    def total_price
+      list.inject(0) do |price, item|
+        price + item.price_with_taxes
+      end
     end
   
     def show_list
