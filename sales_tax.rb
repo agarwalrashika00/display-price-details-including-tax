@@ -28,9 +28,7 @@
     end
 
     def total_price
-      list.inject(0) do |price, item|
-        price + item.price_with_taxes
-      end
+      list.sum(&:price_with_taxes)
     end
   
     def show_list
